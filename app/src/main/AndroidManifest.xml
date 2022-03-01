@@ -10,9 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MySQLiteAppJava">
         <activity
-            android:name=".MainActivity2"
-            android:exported="false" />
-        <activity
             android:name=".UpdateActivity"
             android:exported="false" />
         <activity

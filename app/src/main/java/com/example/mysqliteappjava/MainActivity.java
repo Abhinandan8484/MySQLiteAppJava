@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         btnsave.setOnClickListener(view -> {
 
-            String name=edname.getText().toString();
+            String name=edname.getText().toString().trim();
             String stuclass=edclass.getText().toString();
             int roll=Integer.parseInt(edroll.getText().toString());
             boolean re=dbHelper.addStudent(name,stuclass,roll);

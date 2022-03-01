@@ -1,6 +1,7 @@
 package com.example.mysqliteappjava;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -43,19 +45,40 @@ public class MyAdper extends RecyclerView.Adapter<MyAdper.MyViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int pos =holder.getAdapterPosition();
-                String name,stuclass;
 
-                name=studentDataList.get(pos).getName();
-                int roll=studentDataList.get(pos).getRoll();
-                stuclass=studentDataList.get(pos).getStuclass();
+                AlertDialog.Builder builder=new AlertDialog.Builder(view.getContext());
+                builder.setTitle("Update Record");
+                builder.setMessage("You want to Update the Record");
+                builder.setCancelable(false);
 
-                Intent intent=new Intent(view.getContext(),UpdateActivity.class);
-                intent.putExtra("stuname",name);
-                intent.putExtra("sturoll",roll);
-                intent.putExtra("stuclass",stuclass);
-                view.getContext().startActivity(intent);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
+                        int pos =holder.getAdapterPosition();
+                        String name,stuclass;
+
+                        name=studentDataList.get(pos).getName();
+                        int roll=studentDataList.get(pos).getRoll();
+                        stuclass=studentDataList.get(pos).getStuclass();
+
+                        Intent intent=new Intent(view.getContext(),UpdateActivity.class);
+                        intent.putExtra("stuname",name);
+                        intent.putExtra("sturoll",roll);
+                        intent.putExtra("stuclass",stuclass);
+                        view.getContext().startActivity(intent);
+
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(view.getContext(), "Cancel to Update", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                AlertDialog alertDialog=builder.create();
+                alertDialog.show();
             }
         });
 
@@ -63,17 +86,38 @@ public class MyAdper extends RecyclerView.Adapter<MyAdper.MyViewHolder> {
             @Override
             public boolean onLongClick(View view) {
 
-                int pos=holder.getAdapterPosition();
-                String name=studentDataList.get(pos).getName();
-                dbHelper=new DBHelper(view.getContext());
-                boolean re= dbHelper.deleteStudent(name);
-                if (re){
-                    Toast.makeText(view.getContext(), "Record Deleted Successfully", Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(view.getContext(),RecycleActivity.class);
-                    view.getContext().startActivity(intent);
-                }else{
-                    Toast.makeText(view.getContext(), "Field to Delete the Record", Toast.LENGTH_SHORT).show();
-                }
+                AlertDialog.Builder builder=new AlertDialog.Builder(view.getContext());
+                builder.setTitle("Delete Record");
+                builder.setMessage("You want to delete the Record");
+                builder.setCancelable(false);
+
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        int pos=holder.getAdapterPosition();
+                        String name=studentDataList.get(pos).getName();
+                        dbHelper=new DBHelper(view.getContext());
+                        boolean re= dbHelper.deleteStudent(name);
+                        if (re){
+                            Toast.makeText(view.getContext(), "Record Deleted Successfully", Toast.LENGTH_SHORT).show();
+                            Intent intent=new Intent(view.getContext(),RecycleActivity.class);
+                            view.getContext().startActivity(intent);
+                        }else{
+                            Toast.makeText(view.getContext(), "Field to Delete the Record", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(view.getContext(), "Cancel to delete", Toast.LENGTH_SHORT).show();     
+                    }
+                });
+
+                AlertDialog alertDialog=builder.create();
+                alertDialog.show();
 
                 return false;
             }

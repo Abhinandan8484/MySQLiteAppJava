@@ -58,7 +58,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(ColClass,stuclass);
         contentValues.put(ColRoll,roll);
 
-        Long result= database.insert(TableName,null,contentValues);
+        long result= database.insert(TableName,null,contentValues);
 
         database.close();
         if (result==-1){
